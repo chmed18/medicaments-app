@@ -1,5 +1,32 @@
 # Getting Started
 
+## Secure configuration for deployment
+
+This application expects sensitive values from environment variables (no hardcoded credentials in source files).
+
+Required variables:
+
+- `APP_PORT` (example: `8080`)
+- `APP_USERNAME`
+- `APP_PASSWORD`
+- `DB_URL` (example: `jdbc:postgresql://localhost:5432/medicaments_db`)
+- `DB_USERNAME`
+- `DB_PASSWORD`
+
+PowerShell example:
+
+```powershell
+$env:APP_PORT="8080"
+$env:APP_USERNAME="admin"
+$env:APP_PASSWORD="change-me-now"
+$env:DB_URL="jdbc:postgresql://localhost:5432/medicaments_db"
+$env:DB_USERNAME="postgres"
+$env:DB_PASSWORD="change-me-db"
+./mvnw.cmd spring-boot:run
+```
+
+You can copy `.env.example` as a base for your deployment environment.
+
 ### Reference Documentation
 
 For further reference, please consider the following sections:

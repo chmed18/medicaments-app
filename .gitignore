@@ -52,6 +52,7 @@ Thumbs.db
 # Environment variables
 # =========================
 .env
+application-local.properties
 
 # =========================
 # Node (si React plus tard)
