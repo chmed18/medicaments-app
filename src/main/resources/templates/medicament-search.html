@@ -231,7 +231,7 @@
             <thead>
             <tr>
                 <th>Libelle complet</th>
-                <th>Prix pharmacie (MRU)</th>
+                <th>Prix pharmacie</th>
             </tr>
             </thead>
             <tbody>
@@ -240,7 +240,7 @@
             </tr>
             <tr th:each="medicament : ${results}">
                 <td data-label="Libelle complet" th:text="${medicament.libelleComplet}"></td>
-                <td class="price-cell" data-label="Prix pharmacie (MRU)" th:text="${medicament.prixPharmacie}"></td>
+                <td class="price-cell" data-label="Prix pharmacie" th:text="${medicament.prixPharmacie}"></td>
             </tr>
             </tbody>
         </table>
