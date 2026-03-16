@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "titulaire_amm")
+@Table(name = "laboratoire")
 @Getter
 @Setter
 @NoArgsConstructor
-public class TitulaireAmm {
+public class Laboratoire {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,10 @@ public class TitulaireAmm {
 
     @Column(name = "nom", nullable = false, unique = true, length = 255)
     private String nom;
+
+    @Column(name = "adresse", length = 500)
+    private String adresse;
 }
+
 
 

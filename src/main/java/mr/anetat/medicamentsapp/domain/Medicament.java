@@ -1,5 +1,7 @@
 package mr.anetat.medicamentsapp.domain;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,17 +32,29 @@ public class Medicament {
     @Column(name = "libelle_complet", nullable = false, length = 500)
     private String libelleComplet;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "forme_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "forme_id", nullable = true)
     private Forme forme;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "titulaire_amm_id")
-    private TitulaireAmm titulaireAmm;
+    @JoinColumn(name = "laboratoire_id")
+    private Laboratoire laboratoire;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupe_equivalence_id")
     private GroupeEquivalence groupeEquivalence;
+
+    @Column(name = "presentation", length = 255)
+    private String presentation;
+
+    @Column(name = "prix_pharmacie", precision = 10, scale = 2)
+    private BigDecimal prixPharmacie;
+
+    @Column(name = "prix_grossiste", precision = 10, scale = 2)
+    private BigDecimal prixGrossiste;
+
+    @Column(name = "prix_camec", precision = 10, scale = 2)
+    private BigDecimal prixCamec;
 
     @Column(name = "source", length = 255)
     private String source;

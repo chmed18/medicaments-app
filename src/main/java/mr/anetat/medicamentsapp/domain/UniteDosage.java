@@ -21,11 +21,12 @@ public class UniteDosage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "code", nullable = false, unique = true, length = 50)
-    private String code;
 
     @Column(name = "libelle", length = 100)
     private String libelle;
+
+    @Column(name = "libelle_complet", length = 255)
+    private String libelleComplet;
 }
 
 
