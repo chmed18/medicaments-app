@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="table-wrapper" th:fragment="results-table">
+    <table>
+        <thead>
+        <tr>
+            <th>Libellé complet</th>
+            <th>Prix pharmacie</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="empty-row" th:if="${#lists.isEmpty(results)}">
+            <td colspan="2">Aucun résultat trouvé.</td>
+        </tr>
+        <tr th:each="medicament : ${results}">
+            <td data-label="Libellé complet" th:text="${medicament.libelleComplet}"></td>
+            <td class="price-cell" data-label="Prix pharmacie" th:text="${medicament.prixPharmacie}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+

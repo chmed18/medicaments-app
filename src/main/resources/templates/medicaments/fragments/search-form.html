@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section class="search-card" th:fragment="search-form">
+    <form method="get"
+          th:action="@{/}"
+          class="search-form"
+          data-autocomplete-config
+          th:attr="data-autocomplete-url=@{/api/medicaments/autocomplete},data-autocomplete-min-length=2,data-autocomplete-debounce-ms=250">
+        <label class="search-label" for="query">Rechercher un médicament :</label>
+        <div class="autocomplete-wrapper" data-autocomplete-root>
+            <input id="query"
+                   class="search-input"
+                   name="query"
+                   type="text"
+                   th:value="${query}"
+                   placeholder="Ex: Doliprane 1000 mg comprimé"
+                   autocomplete="off"
+                   aria-autocomplete="list"
+                   aria-controls="autocomplete-list"
+                   aria-expanded="false"
+                   data-autocomplete-input />
+            <ul id="autocomplete-list"
+                class="autocomplete-list"
+                role="listbox"
+                aria-label="Suggestions"
+                data-autocomplete-list></ul>
+        </div>
+        <button class="search-button" type="submit">Rechercher</button>
+    </form>
+    <div class="result-meta">
+        <span class="results-chip" th:text="${results != null ? #lists.size(results) : 0} + ' résultat(s)'">0 résultat(s)</span>
+    </div>
+</section>
+</body>
+</html>
+
