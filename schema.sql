@@ -150,10 +150,18 @@ CREATE INDEX idx_mc_molecule_dosage
 -- INDEX TRIGRAM POUR RECHERCHE PARTIELLE
 -- =========================
 
-CREATE INDEX idx_medicament_libelle_trgm
-    ON medicament
-    USING gin (libelle gin_trgm_ops);
+-- Index préfixe insensible à la casse pour la recherche principale (LOWER(col) LIKE 'query%')
+CREATE INDEX idx_medicament_libelle_prefix
+    ON medicament (LOWER(libelle) text_pattern_ops);
 
+-- Index trigram insensible à la casse pour recherche libre (LOWER(col) LIKE '%query%')
+CREATE INDEX idx_medicament_libelle_trgm
+    ON medicament USING gin (LOWER(libelle) gin_trgm_ops);
+
+-- Index préfixe insensible à la casse pour l'autocomplétion (LOWER(col) LIKE 'query%')
+CREATE INDEX idx_medicament_libelle_complet_prefix
+    ON medicament (LOWER(libelle_complet) text_pattern_ops);
+
+-- Index trigram insensible à la casse pour recherche libre (LOWER(col) LIKE '%query%')
 CREATE INDEX idx_medicament_libelle_complet_trgm
-    ON medicament
-    USING gin (libelle_complet gin_trgm_ops);
+    ON medicament USING gin (LOWER(libelle_complet) gin_trgm_ops);

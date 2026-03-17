@@ -206,6 +206,56 @@
                 color: #355675;
             }
         }
+
+        /* ── Autocomplete ── */
+        .autocomplete-wrapper {
+            position: relative;
+            flex: 1 1 420px;
+            min-width: 220px;
+        }
+
+        .autocomplete-wrapper input[type="text"] {
+            width: 100%;
+        }
+
+        #autocomplete-list {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid #bdd2e2;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(17, 44, 73, 0.12);
+            z-index: 100;
+            max-height: 280px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        #autocomplete-list li {
+            list-style: none;
+            padding: 0.65rem 0.85rem;
+            cursor: pointer;
+            font-size: 0.93rem;
+            border-bottom: 1px solid #eef3f8;
+            color: var(--ink);
+            transition: background 0.1s;
+        }
+
+        #autocomplete-list li:last-child { border-bottom: 0; }
+
+        #autocomplete-list li:hover,
+        #autocomplete-list li.active {
+            background: var(--pharma-blue-soft);
+            color: var(--pharma-blue);
+        }
+
+        #autocomplete-list li mark {
+            background: transparent;
+            color: var(--pharma-blue);
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -218,7 +268,10 @@
     <section class="search-card">
         <form method="get" th:action="@{/}">
             <label for="query">Rechercher un medicament :</label>
-            <input id="query" name="query" type="text" th:value="${query}" placeholder="Ex: Doliprane 1000 mg comprime" />
+            <div class="autocomplete-wrapper">
+                <input id="query" name="query" type="text" th:value="${query}" placeholder="Ex: Doliprane 1000 mg comprime" autocomplete="off" />
+                <ul id="autocomplete-list" role="listbox" aria-label="Suggestions"></ul>
+            </div>
             <button type="submit">Rechercher</button>
         </form>
         <div class="result-meta">
@@ -246,5 +299,92 @@
         </table>
     </div>
 </main>
+
+<script>
+    (function () {
+        const input = document.getElementById('query');
+        const list  = document.getElementById('autocomplete-list');
+        let activeIndex = -1;
+        let debounceTimer = null;
+        let currentQuery  = '';
+
+        function highlight(text, query) {
+            const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            return text.replace(new RegExp('(' + escaped + ')', 'gi'), '<mark>$1</mark>');
+        }
+
+        function renderList(suggestions, query) {
+            list.innerHTML = '';
+            activeIndex = -1;
+            if (!suggestions.length) { list.style.display = 'none'; return; }
+            suggestions.forEach(function (item) {
+                const li = document.createElement('li');
+                li.setAttribute('role', 'option');
+                li.innerHTML = highlight(item, query);
+                li.addEventListener('mousedown', function (e) {
+                    e.preventDefault();
+                    input.value = item;
+                    list.style.display = 'none';
+                    input.form.submit();
+                });
+                list.appendChild(li);
+            });
+            list.style.display = 'block';
+        }
+
+        function fetchSuggestions(query) {
+            if (!query || query.length < 2) { list.style.display = 'none'; return; }
+            currentQuery = query;
+            fetch('/api/medicaments/autocomplete?query=' + encodeURIComponent(query), {
+                credentials: 'same-origin',
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(function (r) { return r.ok ? r.json() : []; })
+            .then(function (data) {
+                if (currentQuery === query) renderList(data, query);
+            })
+            .catch(function () { list.style.display = 'none'; });
+        }
+
+        input.addEventListener('input', function () {
+            clearTimeout(debounceTimer);
+            const q = input.value.trim();
+            debounceTimer = setTimeout(function () { fetchSuggestions(q); }, 250);
+        });
+
+        input.addEventListener('keydown', function (e) {
+            const items = list.querySelectorAll('li');
+            if (!items.length || list.style.display === 'none') return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                activeIndex = (activeIndex + 1) % items.length;
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                activeIndex = (activeIndex - 1 + items.length) % items.length;
+            } else if (e.key === 'Enter') {
+                if (activeIndex >= 0 && items[activeIndex]) {
+                    e.preventDefault();
+                    input.value = items[activeIndex].textContent;
+                    list.style.display = 'none';
+                    input.form.submit();
+                }
+                return;
+            } else if (e.key === 'Escape') {
+                list.style.display = 'none';
+                activeIndex = -1;
+                return;
+            } else { return; }
+            items.forEach(function (el, i) {
+                el.classList.toggle('active', i === activeIndex);
+            });
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!input.contains(e.target) && !list.contains(e.target)) {
+                list.style.display = 'none';
+            }
+        });
+    })();
+</script>
 </body>
 </html>

@@ -25,6 +25,12 @@ public class MedicamentQueryRestController {
         return medicamentQueryService.searchMedicaments(query);
     }
 
+    @GetMapping("/autocomplete")
+    public List<String> autocomplete(
+            @RequestParam(name = "query", required = false) String query) {
+        return medicamentQueryService.getAutocompleteSuggestions(query);
+    }
+
     @GetMapping("/ping")
     public String ping() {
         return "ok";

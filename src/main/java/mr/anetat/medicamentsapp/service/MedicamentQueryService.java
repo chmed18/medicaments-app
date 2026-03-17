@@ -5,6 +5,7 @@ import java.util.List;
 import mr.anetat.medicamentsapp.domain.Medicament;
 import mr.anetat.medicamentsapp.dto.MedicamentSearchResultDto;
 import mr.anetat.medicamentsapp.repository.MedicamentRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +31,13 @@ public class MedicamentQueryService {
                 .stream()
                 .map(this::mapToMedicamentSearchResult)
                 .toList();
+    }
+
+    public List<String> getAutocompleteSuggestions(String query) {
+        if (query == null || query.isBlank() || query.trim().length() < 2) {
+            return List.of();
+        }
+        return medicamentRepository.findLibelleCompletSuggestions(query.trim(), PageRequest.of(0, 10));
     }
 
     private MedicamentSearchResultDto mapToMedicamentSearchResult(Medicament medicament) {
