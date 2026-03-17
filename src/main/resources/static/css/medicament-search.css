@@ -29,13 +29,41 @@ body {
     background: linear-gradient(135deg, #0f4c81 0%, #1a6fa6 60%, #2390b8 100%);
     color: #fff;
     border-radius: 16px;
-    padding: 1.5rem;
+    padding: 0.85rem 0.8rem;
     box-shadow: 0 10px 28px rgba(15, 76, 129, 0.22);
     margin-bottom: 1rem;
 }
 
+.hero-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+}
+
+.hero-copy {
+    min-width: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.hero-logo {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.hero-logo-country {
+    height: 86px;
+}
+
+.hero-logo-ministry {
+    height: 78px;
+}
+
 .hero h1 {
-    margin: 0 0 0.35rem;
+    margin: 0 0 0.2rem;
     font-size: 1.45rem;
 }
 
@@ -219,7 +247,15 @@ tbody tr:nth-child(even) {
     }
 
     .hero {
-        padding: 1.1rem;
+        padding: 0.75rem 0.55rem;
+    }
+
+    .hero-logo-country {
+        height: 66px;
+    }
+
+    .hero-logo-ministry {
+        height: 60px;
     }
 
     .hero h1 {
