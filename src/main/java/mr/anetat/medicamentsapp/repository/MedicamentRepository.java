@@ -1,6 +1,7 @@
 package mr.anetat.medicamentsapp.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import mr.anetat.medicamentsapp.domain.Medicament;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,28 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
 
     @Query("SELECT m.libelleComplet FROM Medicament m WHERE LOWER(m.libelleComplet) LIKE LOWER(CONCAT(:query, '%')) ORDER BY m.libelleComplet")
     List<String> findLibelleCompletSuggestions(@Param("query") String query, Pageable pageable);
+
+    @Query("""
+            SELECT m
+            FROM Medicament m
+            LEFT JOIN FETCH m.forme
+            LEFT JOIN FETCH m.laboratoire
+            LEFT JOIN FETCH m.groupeEquivalence
+            WHERE m.id = :id
+            """)
+    Optional<Medicament> findDetailById(@Param("id") Long id);
+
+    @Query("""
+            SELECT m
+            FROM Medicament m
+            LEFT JOIN FETCH m.laboratoire
+            WHERE m.groupeEquivalence.id = :groupeId
+              AND m.id <> :currentMedicamentId
+            ORDER BY LOWER(m.libelleComplet)
+            """)
+    List<Medicament> findEquivalentMedicaments(
+            @Param("groupeId") Long groupeId,
+            @Param("currentMedicamentId") Long currentMedicamentId);
 
     List<Medicament> findByGroupeEquivalenceId(Long groupeId);
 }

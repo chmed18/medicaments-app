@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${medicament.libelleComplet} + ' - Fiche médicament'">Fiche médicament</title>
+    <link rel="stylesheet" th:href="@{/css/medicament-search.css}" href="/css/medicament-search.css">
+    <script defer th:src="@{/js/medicament-search.js}" src="/js/medicament-search.js"></script>
+</head>
+<body>
+<main class="page page-detail">
+    <th:block th:replace="~{medicaments/fragments/hero :: hero}"></th:block>
+
+    <section class="detail-card detail-intro">
+        <a class="back-link" th:href="@{/}">← Retour à la recherche</a>
+        <p class="detail-eyebrow">Fiche médicament</p>
+        <h1 class="detail-title" th:text="${medicament.libelleComplet}">Paracétamol 1000 mg comprimé</h1>
+        <p class="detail-subtitle" th:text="${medicament.libelle}">Paracétamol</p>
+
+        <div class="detail-summary-grid">
+            <article class="summary-item">
+                <span class="summary-label">Forme</span>
+                <strong th:text="${medicament.forme != null && !#strings.isEmpty(medicament.forme) ? medicament.forme : 'Non renseignée'}">Comprimé</strong>
+            </article>
+            <article class="summary-item">
+                <span class="summary-label">Présentation</span>
+                <strong th:text="${medicament.presentation != null && !#strings.isEmpty(medicament.presentation) ? medicament.presentation : 'Non renseignée'}">Boîte de 8</strong>
+            </article>
+            <article class="summary-item">
+                <span class="summary-label">Laboratoire</span>
+                <strong th:text="${medicament.laboratoire != null && !#strings.isEmpty(medicament.laboratoire) ? medicament.laboratoire : 'Non renseigné'}">Sanofi</strong>
+            </article>
+            <article class="summary-item summary-item-accent">
+                <span class="summary-label">Prix pharmacie</span>
+                <strong th:text="${medicament.prixPharmacie != null ? medicament.prixPharmacie + ' MRU' : 'Non renseigné'}">1500 MRU</strong>
+            </article>
+        </div>
+    </section>
+
+    <section class="detail-card detail-section">
+        <div class="section-heading">
+            <div>
+                <h2>Composition</h2>
+                <p>Molécules actives et dosages pour ce médicament.</p>
+            </div>
+        </div>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(medicament.molecules)}">
+            Aucune composition n’est renseignée pour ce médicament.
+        </div>
+
+        <div class="molecule-grid" th:unless="${#lists.isEmpty(medicament.molecules)}">
+            <article class="molecule-card" th:each="molecule : ${medicament.molecules}">
+                <h3 th:text="${molecule.nom}">Paracétamol</h3>
+                <p class="molecule-dosage">
+                    <span class="summary-label">Dosage</span>
+                    <strong th:text="${molecule.dosageValeur + (molecule.uniteDosage != null ? ' ' + molecule.uniteDosage : '')}">1000 mg</strong>
+                </p>
+            </article>
+        </div>
+    </section>
+
+    <section class="detail-card detail-section">
+        <div class="section-heading">
+            <div>
+                <h2>Médicaments équivalents</h2>
+                <p>Autres médicaments du même groupe d’équivalence.</p>
+            </div>
+            <span class="results-chip" th:text="${#lists.size(medicament.equivalents)} + ' équivalent(s)'">0 équivalent(s)</span>
+        </div>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(medicament.equivalents)}">
+            Aucun médicament équivalent n’est actuellement disponible pour cette fiche.
+        </div>
+
+        <div class="equivalent-grid" th:unless="${#lists.isEmpty(medicament.equivalents)}">
+            <article class="equivalent-card" th:each="equivalent : ${medicament.equivalents}">
+                <h3>
+                    <a class="equivalent-link"
+                       th:href="@{/medicaments/{id}(id=${equivalent.id})}"
+                       th:text="${equivalent.libelleComplet}">Paracétamol 1000 mg comprimé</a>
+                </h3>
+                <dl class="equivalent-meta">
+                    <div>
+                        <dt>Laboratoire</dt>
+                        <dd th:text="${equivalent.laboratoire != null && !#strings.isEmpty(equivalent.laboratoire) ? equivalent.laboratoire : 'Non renseigné'}">Sanofi</dd>
+                    </div>
+                    <div>
+                        <dt>Présentation</dt>
+                        <dd th:text="${equivalent.presentation != null && !#strings.isEmpty(equivalent.presentation) ? equivalent.presentation : 'Non renseignée'}">Boîte de 8</dd>
+                    </div>
+                    <div>
+                        <dt>Prix pharmacie</dt>
+                        <dd class="price-cell" th:text="${equivalent.prixPharmacie != null ? equivalent.prixPharmacie + ' MRU' : 'Non renseigné'}">1500 MRU</dd>
+                    </div>
+                </dl>
+            </article>
+        </div>
+    </section>
+</main>
+</body>
+</html>
+
+

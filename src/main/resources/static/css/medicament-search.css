@@ -147,6 +147,31 @@ body {
     font-size: 0.9rem;
 }
 
+.result-title {
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.result-subtitle {
+    margin-top: 0.18rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.detail-link,
+.back-link,
+.equivalent-link {
+    color: var(--pharma-blue);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.detail-link:hover,
+.back-link:hover,
+.equivalent-link:hover {
+    text-decoration: underline;
+}
+
 .table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -241,6 +266,149 @@ tbody tr:nth-child(even) {
     font-weight: 700;
 }
 
+.page-detail {
+    display: grid;
+    gap: 1rem;
+}
+
+.detail-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.15rem;
+    box-shadow: 0 8px 22px rgba(17, 44, 73, 0.07);
+}
+
+.detail-intro {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.detail-eyebrow {
+    margin: 0;
+    color: var(--pharma-blue);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.82rem;
+}
+
+.detail-title {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.2;
+}
+
+.detail-subtitle {
+    margin: -0.25rem 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+.detail-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.8rem;
+}
+
+.summary-item {
+    background: #f8fbfe;
+    border: 1px solid #deebf5;
+    border-radius: 14px;
+    padding: 0.9rem;
+    display: grid;
+    gap: 0.35rem;
+}
+
+.summary-item-accent {
+    background: linear-gradient(135deg, #edf8f4 0%, #f6fffb 100%);
+    border-color: #cdeede;
+}
+
+.summary-label {
+    color: var(--muted);
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.detail-section {
+    display: grid;
+    gap: 1rem;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 0.8rem;
+}
+
+.section-heading h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.section-heading p {
+    margin: 0.25rem 0 0;
+    color: var(--muted);
+}
+
+.molecule-grid,
+.equivalent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.9rem;
+}
+
+.molecule-card,
+.equivalent-card {
+    border: 1px solid #deebf5;
+    border-radius: 14px;
+    padding: 1rem;
+    background: #fcfeff;
+}
+
+.molecule-card h3,
+.equivalent-card h3 {
+    margin: 0 0 0.55rem;
+    font-size: 1rem;
+}
+
+.molecule-dosage {
+    margin: 0;
+    display: grid;
+    gap: 0.22rem;
+}
+
+.equivalent-meta {
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.equivalent-meta div {
+    display: grid;
+    gap: 0.2rem;
+}
+
+.equivalent-meta dt {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.equivalent-meta dd {
+    margin: 0;
+}
+
+.empty-state {
+    border: 1px dashed #bdd2e2;
+    border-radius: 14px;
+    padding: 1rem;
+    background: #f9fcff;
+    color: var(--muted);
+}
+
 @media (max-width: 640px) {
     .page {
         margin: 1rem auto;
@@ -300,6 +468,23 @@ tbody tr:nth-child(even) {
         content: attr(data-label);
         font-weight: 700;
         color: #355675;
+    }
+
+    .detail-card {
+        padding: 0.9rem;
+    }
+
+    .detail-title {
+        font-size: 1.35rem;
+    }
+
+    .section-heading {
+        flex-direction: column;
+    }
+
+    .molecule-grid,
+    .equivalent-grid {
+        grid-template-columns: 1fr;
     }
 }
 

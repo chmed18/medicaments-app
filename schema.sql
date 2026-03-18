@@ -105,8 +105,8 @@ CREATE TABLE medicament_composition (
 
                                         medicament_id BIGINT NOT NULL,
                                         molecule_id BIGINT NOT NULL,
-                                        dosage_valeur DECIMAL(10,2) NOT NULL CHECK (dosage_valeur > 0),
-                                        unite_dosage_id BIGINT NOT NULL,
+                                        dosage_valeur DECIMAL(10,2) ,
+                                        unite_dosage_id BIGINT,
 
                                         ordre_affichage INT,
 
