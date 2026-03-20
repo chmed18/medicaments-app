@@ -21,6 +21,7 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/webjars/**"
                         ).permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())

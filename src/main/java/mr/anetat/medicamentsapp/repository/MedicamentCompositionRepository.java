@@ -9,6 +9,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface MedicamentCompositionRepository extends JpaRepository<MedicamentComposition, Long> {
 
+    List<MedicamentComposition> findByMedicament_Id(Long medicamentId);
+
+    void deleteByMedicament_Id(Long medicamentId);
+
 	@Query("""
 			SELECT mc
 			FROM MedicamentComposition mc

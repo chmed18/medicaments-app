@@ -4,12 +4,32 @@ import java.util.List;
 import java.util.Optional;
 
 import mr.anetat.medicamentsapp.domain.Medicament;
+import mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
+
+    @Query("""
+            SELECT new mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto(
+                m.id,
+                m.libelleComplet,
+                COALESCE(f.libelleComplet, f.libelle),
+                l.nom,
+                m.presentation,
+                m.prixPharmacie,
+                COUNT(mc.id)
+            )
+            FROM Medicament m
+            LEFT JOIN m.forme f
+            LEFT JOIN m.laboratoire l
+            LEFT JOIN MedicamentComposition mc ON mc.medicament.id = m.id
+            GROUP BY m.id, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie
+            ORDER BY LOWER(m.libelleComplet)
+            """)
+    List<MedicamentAdminListItemDto> findAllForAdminList();
 
     @Query("SELECT m FROM Medicament m WHERE LOWER(m.libelle) LIKE LOWER(CONCAT(:query, '%')) OR LOWER(m.libelleComplet) LIKE LOWER(CONCAT(:query, '%'))")
     List<Medicament> searchByLabel(@Param("query") String query);
