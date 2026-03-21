@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS forme CASCADE;
 -- =========================
 CREATE TABLE forme (
                        id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                       libelle VARCHAR(100) NOT NULL UNIQUE,
+                       libelle VARCHAR(100) NOT NULL,
                        libelle_complet VARCHAR(255)
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE forme (
 -- =========================
 CREATE TABLE molecule (
                           id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                          nom VARCHAR(255) NOT NULL UNIQUE
+                          nom VARCHAR(255) NOT NULL
 );
 
 -- =========================
@@ -39,7 +39,7 @@ CREATE TABLE molecule (
 -- =========================
 CREATE TABLE unite_dosage (
                               id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                              libelle VARCHAR(100),
+                              libelle VARCHAR(100) NOT NULL,
                               libelle_complet VARCHAR(255)
 );
 
@@ -48,9 +48,21 @@ CREATE TABLE unite_dosage (
 -- =========================
 CREATE TABLE laboratoire (
                              id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                             nom VARCHAR(255) NOT NULL UNIQUE,
+                             nom VARCHAR(255) NOT NULL,
                              adresse VARCHAR(500)
 );
+
+CREATE UNIQUE INDEX uq_forme_libelle_lower
+    ON forme (LOWER(libelle));
+
+CREATE UNIQUE INDEX uq_molecule_nom_lower
+    ON molecule (LOWER(nom));
+
+CREATE UNIQUE INDEX uq_unite_dosage_libelle_lower
+    ON unite_dosage (LOWER(libelle));
+
+CREATE UNIQUE INDEX uq_laboratoire_nom_lower
+    ON laboratoire (LOWER(nom));
 
 -- =========================
 -- TABLE groupe_equivalence

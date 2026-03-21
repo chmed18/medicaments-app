@@ -21,7 +21,7 @@ public class Molecule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nom", nullable = false, unique = true, length = 255)
+    @Column(name = "nom", nullable = false, length = 255)
     private String nom;
 }
 

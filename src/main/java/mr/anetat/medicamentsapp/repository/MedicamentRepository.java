@@ -12,6 +12,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
 
+    long countByForme_Id(Long formeId);
+
+    long countByLaboratoire_Id(Long laboratoireId);
+
     @Query("""
             SELECT new mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto(
                 m.id,

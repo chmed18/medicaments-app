@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit} ? 'Modifier ' + ${type.singularLabel} : 'Créer ' + ${type.singularLabel}">Édition référentiel</title>
+    <link rel="stylesheet" th:href="@{/css/admin-referentiels.css}" href="/css/admin-referentiels.css">
+</head>
+<body>
+<main class="admin-page admin-page-narrow">
+    <a class="back-link" th:href="@{/admin/referentiels/{type}(type=${type.slug})}">← Retour à la liste</a>
+
+    <section class="card">
+        <h1 th:text="${isEdit} ? 'Modifier ' + ${type.singularLabel} : 'Créer ' + ${type.singularLabel}">Formulaire</h1>
+
+        <div class="alert error" th:if="${#fields.hasGlobalErrors()}" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+
+        <form method="post"
+              th:if="${isEdit}"
+              th:object="${form}"
+              th:action="@{/admin/referentiels/{type}/{id}(type=${type.slug},id=${entityId})}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <label class="field">
+                <span th:text="${type.primaryFieldLabel}">Libellé</span>
+                <input type="text" th:field="*{primaryValue}" required>
+                <small class="field-error" th:if="${#fields.hasErrors('primaryValue')}" th:errors="*{primaryValue}"></small>
+            </label>
+
+            <label class="field" th:if="${type.hasSecondaryField()}">
+                <span th:text="${type.secondaryFieldLabel}">Complément</span>
+                <textarea rows="4" th:field="*{secondaryValue}"></textarea>
+                <small class="field-error" th:if="${#fields.hasErrors('secondaryValue')}" th:errors="*{secondaryValue}"></small>
+            </label>
+
+            <div class="form-actions">
+                <a class="btn btn-light" th:href="@{/admin/referentiels/{type}(type=${type.slug})}">Annuler</a>
+                <button class="btn btn-primary" type="submit">Mettre à jour</button>
+            </div>
+        </form>
+
+        <form method="post"
+              th:unless="${isEdit}"
+              th:object="${form}"
+              th:action="@{/admin/referentiels/{type}(type=${type.slug})}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <label class="field">
+                <span th:text="${type.primaryFieldLabel}">Libellé</span>
+                <input type="text" th:field="*{primaryValue}" required>
+                <small class="field-error" th:if="${#fields.hasErrors('primaryValue')}" th:errors="*{primaryValue}"></small>
+            </label>
+
+            <label class="field" th:if="${type.hasSecondaryField()}">
+                <span th:text="${type.secondaryFieldLabel}">Complément</span>
+                <textarea rows="4" th:field="*{secondaryValue}"></textarea>
+                <small class="field-error" th:if="${#fields.hasErrors('secondaryValue')}" th:errors="*{secondaryValue}"></small>
+            </label>
+
+            <div class="form-actions">
+                <a class="btn btn-light" th:href="@{/admin/referentiels/{type}(type=${type.slug})}">Annuler</a>
+                <button class="btn btn-primary" type="submit">Créer</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
+
+

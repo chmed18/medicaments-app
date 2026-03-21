@@ -21,7 +21,7 @@ public class Forme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "libelle", nullable = false, unique = true, length = 100)
+    @Column(name = "libelle", nullable = false, length = 100)
     private String libelle;
 
     @Column(name = "libelle_complet", length = 255)

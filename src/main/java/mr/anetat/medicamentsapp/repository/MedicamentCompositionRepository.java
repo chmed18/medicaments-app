@@ -13,6 +13,10 @@ public interface MedicamentCompositionRepository extends JpaRepository<Medicamen
 
     void deleteByMedicament_Id(Long medicamentId);
 
+	long countByMolecule_Id(Long moleculeId);
+
+	long countByUniteDosage_Id(Long uniteDosageId);
+
 	@Query("""
 			SELECT mc
 			FROM MedicamentComposition mc

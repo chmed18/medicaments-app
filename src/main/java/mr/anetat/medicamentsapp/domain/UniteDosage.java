@@ -22,7 +22,7 @@ public class UniteDosage {
     private Long id;
 
 
-    @Column(name = "libelle", length = 100)
+    @Column(name = "libelle", nullable = false, length = 100)
     private String libelle;
 
     @Column(name = "libelle_complet", length = 255)
