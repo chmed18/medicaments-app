@@ -13,24 +13,49 @@ class EquivalenceSignatureServiceTest {
     private final EquivalenceSignatureService equivalenceSignatureService = new EquivalenceSignatureService();
 
     @Test
-    void shouldGenerateCanonicalSignatureSortedAndNormalized() {
+    void shouldGenerateCanonicalSignatureSortedByMoleculeId() {
+        // Deux molécules saisies dans un ordre quelconque : le tri canonique garantit molecule 1 avant molecule 2
         List<MedicamentCompositionForm> compositions = List.of(
                 new MedicamentCompositionForm(2L, new BigDecimal("500.00"), 3L, 2),
                 new MedicamentCompositionForm(1L, new BigDecimal("1000.0"), 4L, 1));
 
-        String signature = equivalenceSignatureService.generateSignature(7L, compositions);
+        String signature = equivalenceSignatureService.generateSignature(compositions);
 
-        assertThat(signature).isEqualTo("forme:7|1:1000:4|2:500:3");
+        assertThat(signature).isEqualTo("1:1000:4|2:500:3");
     }
 
     @Test
-    void shouldIncludeNullFormeInSignature() {
+    void shouldNormalizeDecimalValuesInSignature() {
         List<MedicamentCompositionForm> compositions = List.of(
                 new MedicamentCompositionForm(10L, new BigDecimal("1.50"), 8L, null));
 
-        String signature = equivalenceSignatureService.generateSignature(null, compositions);
+        String signature = equivalenceSignatureService.generateSignature(compositions);
 
-        assertThat(signature).isEqualTo("forme:null|10:1.5:8");
+        assertThat(signature).isEqualTo("10:1.5:8");
+    }
+
+    @Test
+    void shouldProduceSameSignatureRegardlessOfOrdreAffichage() {
+        // Même composition avec ordreAffichage différents → même signature
+        List<MedicamentCompositionForm> compositions1 = List.of(
+                new MedicamentCompositionForm(3L, new BigDecimal("250"), 5L, 1),
+                new MedicamentCompositionForm(7L, new BigDecimal("125"), 2L, 2));
+
+        List<MedicamentCompositionForm> compositions2 = List.of(
+                new MedicamentCompositionForm(7L, new BigDecimal("125"), 2L, 1),
+                new MedicamentCompositionForm(3L, new BigDecimal("250"), 5L, 2));
+
+        String sig1 = equivalenceSignatureService.generateSignature(compositions1);
+        String sig2 = equivalenceSignatureService.generateSignature(compositions2);
+
+        assertThat(sig1).isEqualTo(sig2).isEqualTo("3:250:5|7:125:2");
+    }
+
+    @Test
+    void shouldReturnEmptySignatureForEmptyCompositions() {
+        String signature = equivalenceSignatureService.generateSignature(List.of());
+
+        assertThat(signature).isEmpty();
     }
 }
 

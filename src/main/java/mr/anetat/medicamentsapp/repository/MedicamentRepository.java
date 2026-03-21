@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import mr.anetat.medicamentsapp.domain.Medicament;
 import mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -34,6 +35,56 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
             ORDER BY LOWER(m.libelleComplet)
             """)
     List<MedicamentAdminListItemDto> findAllForAdminList();
+
+    @Query(value = """
+            SELECT new mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto(
+                m.id,
+                m.libelleComplet,
+                COALESCE(f.libelleComplet, f.libelle),
+                l.nom,
+                m.presentation,
+                m.prixPharmacie,
+                COUNT(mc.id)
+            )
+            FROM Medicament m
+            LEFT JOIN m.forme f
+            LEFT JOIN m.laboratoire l
+            LEFT JOIN MedicamentComposition mc ON mc.medicament.id = m.id
+            GROUP BY m.id, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie
+            ORDER BY LOWER(m.libelleComplet)
+            """,
+            countQuery = "SELECT COUNT(m.id) FROM Medicament m")
+    Page<MedicamentAdminListItemDto> findAllForAdminPage(Pageable pageable);
+
+    @Query(value = """
+            SELECT new mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto(
+                m.id,
+                m.libelleComplet,
+                COALESCE(f.libelleComplet, f.libelle),
+                l.nom,
+                m.presentation,
+                m.prixPharmacie,
+                COUNT(mc.id)
+            )
+            FROM Medicament m
+            LEFT JOIN m.forme f
+            LEFT JOIN m.laboratoire l
+            LEFT JOIN MedicamentComposition mc ON mc.medicament.id = m.id
+            WHERE LOWER(m.libelleComplet) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(m.libelle) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(l.nom) LIKE LOWER(CONCAT('%', :query, '%'))
+            GROUP BY m.id, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie
+            ORDER BY LOWER(m.libelleComplet)
+            """,
+            countQuery = """
+            SELECT COUNT(DISTINCT m.id)
+            FROM Medicament m
+            LEFT JOIN m.laboratoire l
+            WHERE LOWER(m.libelleComplet) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(m.libelle) LIKE LOWER(CONCAT('%', :query, '%'))
+               OR LOWER(l.nom) LIKE LOWER(CONCAT('%', :query, '%'))
+            """)
+    Page<MedicamentAdminListItemDto> findForAdminListByQuery(@Param("query") String query, Pageable pageable);
 
     @Query("SELECT m FROM Medicament m WHERE LOWER(m.libelle) LIKE LOWER(CONCAT(:query, '%')) OR LOWER(m.libelleComplet) LIKE LOWER(CONCAT(:query, '%'))")
     List<Medicament> searchByLabel(@Param("query") String query);

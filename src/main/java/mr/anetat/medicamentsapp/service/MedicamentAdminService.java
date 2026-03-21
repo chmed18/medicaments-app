@@ -26,6 +26,9 @@ import mr.anetat.medicamentsapp.repository.MedicamentCompositionRepository;
 import mr.anetat.medicamentsapp.repository.MedicamentRepository;
 import mr.anetat.medicamentsapp.repository.MoleculeRepository;
 import mr.anetat.medicamentsapp.repository.UniteDosageRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +67,14 @@ public class MedicamentAdminService {
     @Transactional(readOnly = true)
     public List<MedicamentAdminListItemDto> findAllForAdmin() {
         return medicamentRepository.findAllForAdminList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MedicamentAdminListItemDto> search(String query, Pageable pageable) {
+        if (query == null || query.isBlank()) {
+            return medicamentRepository.findAllForAdminPage(pageable);
+        }
+        return medicamentRepository.findForAdminListByQuery(query.trim(), pageable);
     }
 
     @Transactional(readOnly = true)
@@ -166,7 +177,7 @@ public class MedicamentAdminService {
     }
 
     private GroupeEquivalence resolveGroupeEquivalence(MedicamentAdminForm form) {
-        String signature = equivalenceSignatureService.generateSignature(form.getFormeId(), form.getCompositions());
+        String signature = equivalenceSignatureService.generateSignature(form.getCompositions());
         return groupeEquivalenceRepository.findBySignature(signature)
                 .orElseGet(() -> {
                     GroupeEquivalence newGroup = new GroupeEquivalence();

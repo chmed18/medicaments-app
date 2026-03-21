@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import mr.anetat.medicamentsapp.dto.MedicamentCompositionForm;
 import org.springframework.stereotype.Service;
@@ -11,20 +12,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class EquivalenceSignatureService {
 
-    public String generateSignature(Long formeId, List<MedicamentCompositionForm> compositions) {
-        String compositionSignature = compositions.stream()
+    /**
+     * Génère la signature d'équivalence à partir des lignes de composition.
+     * Format : molecule_id:dosage:unite_dosage_id, séparateur | (si plusieurs molécules).
+     * Le tri est canonique (moleculeId, dosage, uniteDosageId) pour garantir
+     * la même signature quel que soit l'ordre de saisie.
+     */
+    public String generateSignature(List<MedicamentCompositionForm> compositions) {
+        return compositions.stream()
                 .filter(Objects::nonNull)
                 .sorted(Comparator
-                        .comparing(MedicamentCompositionForm::getOrdreAffichage,
-                                Comparator.nullsLast(Comparator.naturalOrder()))
-                        .thenComparing(MedicamentCompositionForm::getMoleculeId)
+                        .comparing(MedicamentCompositionForm::getMoleculeId)
                         .thenComparing(line -> normalizeDecimal(line.getDosageValeur()))
                         .thenComparing(MedicamentCompositionForm::getUniteDosageId))
                 .map(this::toCompositionToken)
-                .reduce((left, right) -> left + "|" + right)
-                .orElse("");
-
-        return (formeId == null ? "forme:null" : "forme:" + formeId) + "|" + compositionSignature;
+                .collect(Collectors.joining("|"));
     }
 
     private String toCompositionToken(MedicamentCompositionForm line) {
