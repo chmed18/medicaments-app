@@ -1,0 +1,197 @@
+/* =====================================================
+   admin-medicaments.css
+   Complément de admin-referentiels.css pour les pages
+   d'administration des médicaments.
+   ===================================================== */
+
+/* ------ Page layout élargi ------ */
+.admin-page-medium {
+    max-width: 960px;
+}
+
+/* ------ Sélects harmonisés ------ */
+select {
+    width: 100%;
+    border: 1px solid #c9d8e7;
+    border-radius: 10px;
+    padding: 0.65rem 0.75rem;
+    font: inherit;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2365758b'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.12);
+}
+
+/* ------ Grilles de formulaire ------ */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1.2rem;
+}
+
+.form-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0 1.2rem;
+}
+
+.form-full-width {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+    .form-grid-2,
+    .form-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ------ Section titles ------ */
+.section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 1.6rem 0 0.8rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 2px solid var(--line);
+}
+
+/* ------ Composition section ------ */
+.composition-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-top: 1.6rem;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 2px solid var(--line);
+}
+
+.composition-section-header .section-title {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.composition-hint {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+}
+
+.composition-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.composition-row {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    background: #f8fbff;
+    transition: border-color 0.15s;
+}
+
+.composition-row:focus-within {
+    border-color: var(--primary);
+}
+
+.composition-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.65rem;
+}
+
+.composition-row-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+}
+
+.composition-fields-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 0.8fr;
+    gap: 0.5rem 0.8rem;
+    align-items: start;
+}
+
+@media (max-width: 760px) {
+    .composition-fields-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .comp-field-molecule {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .composition-fields-grid {
+        grid-template-columns: 1fr;
+    }
+    .comp-field-molecule {
+        grid-column: auto;
+    }
+}
+
+.add-composition-btn {
+    margin-top: 0.25rem;
+    border-style: dashed;
+}
+
+/* ------ Bouton taille réduite ------ */
+.btn-sm {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.82rem;
+}
+
+/* ------ Étoile champ requis ------ */
+.required-star {
+    color: var(--danger);
+    margin-left: 1px;
+}
+
+/* ------ Tableau liste médicaments ------ */
+.med-table {
+    min-width: 900px;
+}
+
+.cell-libelle {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.cell-libelle-complet {
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.price-header {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.price-cell {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+

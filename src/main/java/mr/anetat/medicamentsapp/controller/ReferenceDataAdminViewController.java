@@ -51,6 +51,7 @@ public class ReferenceDataAdminViewController {
         this.uniteDosageService = uniteDosageService;
     }
 
+
     @GetMapping
     public String index() {
         return "redirect:/admin/referentiels/laboratoires";
@@ -118,6 +119,7 @@ public class ReferenceDataAdminViewController {
         ReferenceDataType resolvedType = ReferenceDataType.fromSlug(type);
         if (bindingResult.hasErrors()) {
             model.addAttribute("type", resolvedType);
+            model.addAttribute("form", form);
             model.addAttribute("isEdit", false);
             return "admin/referentiels/form";
         }
@@ -134,11 +136,13 @@ public class ReferenceDataAdminViewController {
         } catch (ReferenceDataDuplicateException ex) {
             bindingResult.rejectValue("primaryValue", "duplicate", ex.getMessage());
             model.addAttribute("type", resolvedType);
+            model.addAttribute("form", form);
             model.addAttribute("isEdit", false);
             return "admin/referentiels/form";
         } catch (IllegalArgumentException ex) {
             bindingResult.rejectValue("primaryValue", "invalid", ex.getMessage());
             model.addAttribute("type", resolvedType);
+            model.addAttribute("form", form);
             model.addAttribute("isEdit", false);
             return "admin/referentiels/form";
         }
@@ -328,5 +332,3 @@ public class ReferenceDataAdminViewController {
         return trimmed.isEmpty() ? null : trimmed;
     }
 }
-
-

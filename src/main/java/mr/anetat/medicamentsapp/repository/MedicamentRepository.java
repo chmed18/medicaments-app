@@ -20,18 +20,21 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
     @Query("""
             SELECT new mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto(
                 m.id,
+                m.libelle,
                 m.libelleComplet,
                 COALESCE(f.libelleComplet, f.libelle),
                 l.nom,
                 m.presentation,
                 m.prixPharmacie,
+                m.prixGrossiste,
+                m.prixCamec,
                 COUNT(mc.id)
             )
             FROM Medicament m
             LEFT JOIN m.forme f
             LEFT JOIN m.laboratoire l
             LEFT JOIN MedicamentComposition mc ON mc.medicament.id = m.id
-            GROUP BY m.id, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie
+            GROUP BY m.id, m.libelle, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie, m.prixGrossiste, m.prixCamec
             ORDER BY LOWER(m.libelleComplet)
             """)
     List<MedicamentAdminListItemDto> findAllForAdminList();
@@ -39,18 +42,21 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
     @Query(value = """
             SELECT new mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto(
                 m.id,
+                m.libelle,
                 m.libelleComplet,
                 COALESCE(f.libelleComplet, f.libelle),
                 l.nom,
                 m.presentation,
                 m.prixPharmacie,
+                m.prixGrossiste,
+                m.prixCamec,
                 COUNT(mc.id)
             )
             FROM Medicament m
             LEFT JOIN m.forme f
             LEFT JOIN m.laboratoire l
             LEFT JOIN MedicamentComposition mc ON mc.medicament.id = m.id
-            GROUP BY m.id, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie
+            GROUP BY m.id, m.libelle, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie, m.prixGrossiste, m.prixCamec
             ORDER BY LOWER(m.libelleComplet)
             """,
             countQuery = "SELECT COUNT(m.id) FROM Medicament m")
@@ -59,11 +65,14 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
     @Query(value = """
             SELECT new mr.anetat.medicamentsapp.dto.MedicamentAdminListItemDto(
                 m.id,
+                m.libelle,
                 m.libelleComplet,
                 COALESCE(f.libelleComplet, f.libelle),
                 l.nom,
                 m.presentation,
                 m.prixPharmacie,
+                m.prixGrossiste,
+                m.prixCamec,
                 COUNT(mc.id)
             )
             FROM Medicament m
@@ -73,7 +82,7 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Long> {
             WHERE LOWER(m.libelleComplet) LIKE LOWER(CONCAT('%', :query, '%'))
                OR LOWER(m.libelle) LIKE LOWER(CONCAT('%', :query, '%'))
                OR LOWER(l.nom) LIKE LOWER(CONCAT('%', :query, '%'))
-            GROUP BY m.id, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie
+            GROUP BY m.id, m.libelle, m.libelleComplet, f.libelleComplet, f.libelle, l.nom, m.presentation, m.prixPharmacie, m.prixGrossiste, m.prixCamec
             ORDER BY LOWER(m.libelleComplet)
             """,
             countQuery = """

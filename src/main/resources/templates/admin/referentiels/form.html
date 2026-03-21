@@ -10,6 +10,7 @@
 <main class="admin-page admin-page-narrow">
     <a class="back-link" th:href="@{/admin/referentiels/{type}(type=${type.slug})}">← Retour à la liste</a>
 
+
     <section class="card">
         <h1 th:text="${isEdit} ? 'Modifier ' + ${type.singularLabel} : 'Créer ' + ${type.singularLabel}">Formulaire</h1>
 
@@ -23,13 +24,15 @@
 
             <label class="field">
                 <span th:text="${type.primaryFieldLabel}">Libellé</span>
-                <input type="text" th:field="*{primaryValue}" required>
+                <input type="text" th:field="*{primaryValue}" required
+                       th:placeholder="${type.slug == 'molecules' ? 'ex: Paracétamol, Amoxicilline' : (type.slug == 'formes' ? 'ex: cp' : (type.slug == 'unites-dosage' ? 'ex: mg, ml, UI' : 'ex: Laboratoire PHARMA'))}">
                 <small class="field-error" th:if="${#fields.hasErrors('primaryValue')}" th:errors="*{primaryValue}"></small>
             </label>
 
             <label class="field" th:if="${type.hasSecondaryField()}">
                 <span th:text="${type.secondaryFieldLabel}">Complément</span>
-                <textarea rows="4" th:field="*{secondaryValue}"></textarea>
+                <textarea rows="4" th:field="*{secondaryValue}"
+                          th:placeholder="${type.slug == 'formes' ? 'ex: comprimé' : (type.slug == 'unites-dosage' ? 'ex: milligramme' : 'ex: Adresse complète')}"></textarea>
                 <small class="field-error" th:if="${#fields.hasErrors('secondaryValue')}" th:errors="*{secondaryValue}"></small>
             </label>
 
@@ -47,13 +50,15 @@
 
             <label class="field">
                 <span th:text="${type.primaryFieldLabel}">Libellé</span>
-                <input type="text" th:field="*{primaryValue}" required>
+                <input type="text" th:field="*{primaryValue}" required
+                       th:placeholder="${type.slug == 'molecules' ? 'ex: Paracétamol, Amoxicilline' : (type.slug == 'formes' ? 'ex: cp' : (type.slug == 'unites-dosage' ? 'ex: mg, ml, UI' : 'ex: Laboratoire PHARMA'))}">
                 <small class="field-error" th:if="${#fields.hasErrors('primaryValue')}" th:errors="*{primaryValue}"></small>
             </label>
 
             <label class="field" th:if="${type.hasSecondaryField()}">
                 <span th:text="${type.secondaryFieldLabel}">Complément</span>
-                <textarea rows="4" th:field="*{secondaryValue}"></textarea>
+                <textarea rows="4" th:field="*{secondaryValue}"
+                          th:placeholder="${type.slug == 'formes' ? 'ex: comprimé' : (type.slug == 'unites-dosage' ? 'ex: milligramme' : 'ex: Adresse complète')}"></textarea>
                 <small class="field-error" th:if="${#fields.hasErrors('secondaryValue')}" th:errors="*{secondaryValue}"></small>
             </label>
 
@@ -66,5 +71,4 @@
 </main>
 </body>
 </html>
-
 

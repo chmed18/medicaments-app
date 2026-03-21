@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit} ? 'Modifier le médicament' : 'Nouveau médicament'">Formulaire médicament</title>
+    <link rel="stylesheet" th:href="@{/css/admin-referentiels.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-medicaments.css}">
+    <script defer th:src="@{/js/admin-medicaments.js}"></script>
+</head>
+<body>
+<main class="admin-page admin-page-medium">
+
+    <a class="back-link" th:href="@{/admin/medicaments}">← Retour à la liste</a>
+
+    <nav class="admin-nav">
+        <a class="active" th:href="@{/admin/medicaments}">Médicaments</a>
+        <a th:href="@{/admin/referentiels/laboratoires}">Laboratoires</a>
+        <a th:href="@{/admin/referentiels/molecules}">Molécules</a>
+        <a th:href="@{/admin/referentiels/formes}">Formes</a>
+        <a th:href="@{/admin/referentiels/unites-dosage}">Unités de dosage</a>
+    </nav>
+
+    <section class="card">
+        <h1 th:text="${isEdit} ? 'Modifier le médicament' : 'Nouveau médicament'">Formulaire</h1>
+
+        <!-- Erreurs globales -->
+        <div class="alert error"
+             th:if="${#fields.hasGlobalErrors()}"
+             th:each="err : ${#fields.globalErrors()}"
+             th:text="${err}">
+        </div>
+
+        <form method="post"
+              th:object="${form}"
+              th:action="${isEdit} ? @{/admin/medicaments/{id}(id=${medicamentId})} : @{/admin/medicaments}">
+
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <!-- ====== SECTION IDENTITÉ ====== -->
+            <h2 class="section-title">Identité</h2>
+
+            <div class="form-grid-2">
+
+                <label class="field">
+                    <span>Libellé <span class="required-star">*</span></span>
+                    <input type="text"
+                           th:field="*{libelle}"
+                           maxlength="255"
+                           placeholder="ex: AMOXICILLINE 500"
+                           required>
+                    <small class="field-error" th:if="${#fields.hasErrors('libelle')}" th:errors="*{libelle}"></small>
+                </label>
+
+                <label class="field">
+                    <span>Libellé complet <span class="required-star">*</span></span>
+                    <input type="text"
+                           th:field="*{libelleComplet}"
+                           maxlength="500"
+                           placeholder="ex: AMOXICILLINE 500 mg gélule"
+                           required>
+                    <small class="field-error" th:if="${#fields.hasErrors('libelleComplet')}" th:errors="*{libelleComplet}"></small>
+                </label>
+
+                <label class="field">
+                    <span>Forme galénique</span>
+                    <select th:field="*{formeId}">
+                        <option value="">— Aucune forme —</option>
+                        <option th:each="forme : ${formes}"
+                                th:value="${forme.id}"
+                                th:text="${forme.libelle}">
+                        </option>
+                    </select>
+                    <small class="field-error" th:if="${#fields.hasErrors('formeId')}" th:errors="*{formeId}"></small>
+                </label>
+
+                <label class="field">
+                    <span>Laboratoire <span class="required-star">*</span></span>
+                    <select th:field="*{laboratoireId}" required>
+                        <option value="">— Sélectionner un laboratoire —</option>
+                        <option th:each="labo : ${laboratoires}"
+                                th:value="${labo.id}"
+                                th:text="${labo.nom}">
+                        </option>
+                    </select>
+                    <small class="field-error" th:if="${#fields.hasErrors('laboratoireId')}" th:errors="*{laboratoireId}"></small>
+                </label>
+
+                <label class="field form-full-width">
+                    <span>Présentation</span>
+                    <input type="text"
+                           th:field="*{presentation}"
+                           maxlength="255"
+                           placeholder="ex: Boîte de 12 gélules">
+                </label>
+
+                <label class="field form-full-width">
+                    <span>Source</span>
+                    <input type="text"
+                           th:field="*{source}"
+                           maxlength="255"
+                           placeholder="ex: Pharmacopée nationale 2024">
+                </label>
+
+            </div>
+
+            <!-- ====== SECTION PRIX ====== -->
+            <h2 class="section-title">Prix</h2>
+
+            <div class="form-grid-3">
+
+                <label class="field">
+                    <span>Prix pharmacie (MRU)</span>
+                    <input type="number"
+                           th:field="*{prixPharmacie}"
+                           min="0" step="0.01"
+                           placeholder="0.00"
+                           data-min-zero>
+                    <small class="field-error" th:if="${#fields.hasErrors('prixPharmacie')}" th:errors="*{prixPharmacie}"></small>
+                </label>
+
+                <label class="field">
+                    <span>Prix grossiste (MRU)</span>
+                    <input type="number"
+                           th:field="*{prixGrossiste}"
+                           min="0" step="0.01"
+                           placeholder="0.00"
+                           data-min-zero>
+                    <small class="field-error" th:if="${#fields.hasErrors('prixGrossiste')}" th:errors="*{prixGrossiste}"></small>
+                </label>
+
+                <label class="field">
+                    <span>Prix CAMEC (MRU)</span>
+                    <input type="number"
+                           th:field="*{prixCamec}"
+                           min="0" step="0.01"
+                           placeholder="0.00"
+                           data-min-zero>
+                    <small class="field-error" th:if="${#fields.hasErrors('prixCamec')}" th:errors="*{prixCamec}"></small>
+                </label>
+
+            </div>
+
+            <!-- ====== SECTION COMPOSITION ====== -->
+            <div class="composition-section-header">
+                <h2 class="section-title" style="margin:0">Composition</h2>
+                <span class="composition-hint">Au moins une ligne requise</span>
+            </div>
+
+            <div id="composition-list" class="composition-list">
+
+                <!-- Lignes rendues par Thymeleaf (existantes) -->
+                <div class="composition-row"
+                     th:each="comp,stat : *{compositions}">
+
+                    <div class="composition-row-header">
+                        <span class="composition-row-title"
+                              th:text="'Composition ' + (${stat.index} + 1)">Composition 1</span>
+                        <button type="button"
+                                class="btn btn-danger btn-sm"
+                                data-remove-row
+                                title="Supprimer cette ligne">× Supprimer</button>
+                    </div>
+
+                    <div class="composition-fields-grid">
+
+                        <label class="field comp-field-molecule">
+                            <span>Molécule <span class="required-star">*</span></span>
+                            <select th:name="${'compositions[' + stat.index + '].moleculeId'}"
+                                    data-comp-field="moleculeId"
+                                    required>
+                                <option value="">— Molécule —</option>
+                                <option th:each="mol : ${molecules}"
+                                        th:value="${mol.id}"
+                                        th:text="${mol.nom}"
+                                        th:selected="${comp.moleculeId != null && comp.moleculeId == mol.id}">
+                                </option>
+                            </select>
+                            <small class="field-error"
+                                   th:if="${#fields.hasErrors('compositions[__${stat.index}__].moleculeId')}"
+                                   th:errors="*{compositions[__${stat.index}__].moleculeId}">
+                            </small>
+                        </label>
+
+                        <label class="field">
+                            <span>Dosage <span class="required-star">*</span></span>
+                            <input type="number"
+                                   th:name="${'compositions[' + stat.index + '].dosageValeur'}"
+                                   th:value="${comp.dosageValeur}"
+                                   data-comp-field="dosageValeur"
+                                   step="0.01" min="0.01"
+                                   placeholder="ex : 500"
+                                   required>
+                            <small class="field-error"
+                                   th:if="${#fields.hasErrors('compositions[__${stat.index}__].dosageValeur')}"
+                                   th:errors="*{compositions[__${stat.index}__].dosageValeur}">
+                            </small>
+                        </label>
+
+                        <label class="field">
+                            <span>Unité <span class="required-star">*</span></span>
+                            <select th:name="${'compositions[' + stat.index + '].uniteDosageId'}"
+                                    data-comp-field="uniteDosageId"
+                                    required>
+                                <option value="">— Unité —</option>
+                                <option th:each="ud : ${unitesDosage}"
+                                        th:value="${ud.id}"
+                                        th:text="${ud.libelle}"
+                                        th:selected="${comp.uniteDosageId != null && comp.uniteDosageId == ud.id}">
+                                </option>
+                            </select>
+                            <small class="field-error"
+                                   th:if="${#fields.hasErrors('compositions[__${stat.index}__].uniteDosageId')}"
+                                   th:errors="*{compositions[__${stat.index}__].uniteDosageId}">
+                            </small>
+                        </label>
+
+                        <label class="field">
+                            <span>Ordre</span>
+                            <input type="number"
+                                   th:name="${'compositions[' + stat.index + '].ordreAffichage'}"
+                                   th:value="${comp.ordreAffichage}"
+                                   data-comp-field="ordreAffichage"
+                                   min="1"
+                                   placeholder="ex : 1">
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bouton ajouter une ligne -->
+            <button type="button"
+                    id="add-composition"
+                    class="btn btn-light add-composition-btn">
+                + Ajouter une molécule
+            </button>
+
+            <!-- ====== ACTIONS ====== -->
+            <div class="form-actions">
+                <a class="btn btn-light" th:href="@{/admin/medicaments}">Annuler</a>
+                <button class="btn btn-primary" type="submit"
+                        th:text="${isEdit} ? 'Mettre à jour' : 'Créer le médicament'">Créer</button>
+            </div>
+
+        </form>
+    </section>
+
+    <!--
+        Template HTML pour les nouvelles lignes de composition ajoutées via JS.
+        Thymeleaf traite les expressions th: ici → les <option> sont bien rendus côté serveur.
+        Le JS clone ce contenu et remplace les noms/ids.
+    -->
+    <template id="composition-row-template">
+        <div class="composition-row">
+            <div class="composition-row-header">
+                <span class="composition-row-title">Composition N</span>
+                <button type="button"
+                        class="btn btn-danger btn-sm"
+                        data-remove-row
+                        title="Supprimer cette ligne">× Supprimer</button>
+            </div>
+            <div class="composition-fields-grid">
+
+                <label class="field comp-field-molecule">
+                    <span>Molécule <span class="required-star">*</span></span>
+                    <select name="compositions[__IDX__].moleculeId"
+                            data-comp-field="moleculeId"
+                            required>
+                        <option value="">— Molécule —</option>
+                        <option th:each="mol : ${molecules}"
+                                th:value="${mol.id}"
+                                th:text="${mol.nom}">
+                        </option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Dosage <span class="required-star">*</span></span>
+                    <input type="number"
+                           name="compositions[__IDX__].dosageValeur"
+                           data-comp-field="dosageValeur"
+                           step="0.01" min="0.01"
+                           placeholder="ex : 500"
+                           required>
+                </label>
+
+                <label class="field">
+                    <span>Unité <span class="required-star">*</span></span>
+                    <select name="compositions[__IDX__].uniteDosageId"
+                            data-comp-field="uniteDosageId"
+                            required>
+                        <option value="">— Unité —</option>
+                        <option th:each="ud : ${unitesDosage}"
+                                th:value="${ud.id}"
+                                th:text="${ud.libelle}">
+                        </option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Ordre</span>
+                    <input type="number"
+                           name="compositions[__IDX__].ordreAffichage"
+                           data-comp-field="ordreAffichage"
+                           min="1"
+                           placeholder="ex : 1">
+                </label>
+
+            </div>
+        </div>
+    </template>
+
+</main>
+</body>
+</html>
+

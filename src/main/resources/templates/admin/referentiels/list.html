@@ -19,6 +19,7 @@
     </header>
 
     <nav class="admin-nav">
+        <a th:href="@{/admin/medicaments}">Médicaments</a>
         <a th:classappend="${type.slug == 'laboratoires'} ? ' active'" th:href="@{/admin/referentiels/laboratoires}">Laboratoires</a>
         <a th:classappend="${type.slug == 'molecules'} ? ' active'" th:href="@{/admin/referentiels/molecules}">Molécules</a>
         <a th:classappend="${type.slug == 'formes'} ? ' active'" th:href="@{/admin/referentiels/formes}">Formes</a>
@@ -83,5 +84,4 @@
 </main>
 </body>
 </html>
-
 

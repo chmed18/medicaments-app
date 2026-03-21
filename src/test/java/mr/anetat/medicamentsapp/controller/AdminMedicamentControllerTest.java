@@ -48,8 +48,9 @@ class AdminMedicamentControllerTest {
     @WithMockUser(roles = "ADMIN")
     void shouldRenderAdminMedicamentListWithPagination() throws Exception {
         MedicamentAdminListItemDto item = new MedicamentAdminListItemDto(
-                1L, "Doliprane 1000 mg comprime", "Comprime", "Sanofi", "Boite de 8",
-                new BigDecimal("1500.00"), 1L);
+                1L, "Doliprane 1000", "Doliprane 1000 mg comprime", "Comprime", "Sanofi",
+                "Boite de 8", new BigDecimal("1500.00"), new BigDecimal("1200.00"),
+                new BigDecimal("900.00"), 1L);
 
         when(medicamentAdminService.search(eq(null), any()))
                 .thenReturn(new PageImpl<>(List.of(item), PageRequest.of(0, 10), 1));

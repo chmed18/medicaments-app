@@ -138,17 +138,23 @@ public class MedicamentAdminService {
 
     @Transactional(readOnly = true)
     public List<Forme> findAllFormes() {
-        return formeRepository.findAll();
+        return formeRepository.findAll().stream()
+                .sorted(Comparator.comparing(Forme::getLibelle, String.CASE_INSENSITIVE_ORDER))
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public List<Laboratoire> findAllLaboratoires() {
-        return laboratoireRepository.findAll();
+        return laboratoireRepository.findAll().stream()
+                .sorted(Comparator.comparing(Laboratoire::getNom, String.CASE_INSENSITIVE_ORDER))
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public List<Molecule> findAllMolecules() {
-        return moleculeRepository.findAll();
+        return moleculeRepository.findAll().stream()
+                .sorted(Comparator.comparing(Molecule::getNom, String.CASE_INSENSITIVE_ORDER))
+                .toList();
     }
 
     @Transactional(readOnly = true)
