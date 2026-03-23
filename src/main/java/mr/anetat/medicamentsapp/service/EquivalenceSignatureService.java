@@ -1,6 +1,7 @@
 package mr.anetat.medicamentsapp.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -39,10 +40,8 @@ public class EquivalenceSignatureService {
 
     private String normalizeDecimal(BigDecimal value) {
         if (value == null) {
-            return "0";
+            return "0.00";
         }
-        return value.stripTrailingZeros().toPlainString();
+        return value.setScale(2, RoundingMode.HALF_UP).toPlainString();
     }
 }
-
-

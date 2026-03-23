@@ -21,7 +21,7 @@ class EquivalenceSignatureServiceTest {
 
         String signature = equivalenceSignatureService.generateSignature(compositions);
 
-        assertThat(signature).isEqualTo("1:1000:4|2:500:3");
+        assertThat(signature).isEqualTo("1:1000.00:4|2:500.00:3");
     }
 
     @Test
@@ -31,7 +31,7 @@ class EquivalenceSignatureServiceTest {
 
         String signature = equivalenceSignatureService.generateSignature(compositions);
 
-        assertThat(signature).isEqualTo("10:1.5:8");
+        assertThat(signature).isEqualTo("10:1.50:8");
     }
 
     @Test
@@ -48,7 +48,17 @@ class EquivalenceSignatureServiceTest {
         String sig1 = equivalenceSignatureService.generateSignature(compositions1);
         String sig2 = equivalenceSignatureService.generateSignature(compositions2);
 
-        assertThat(sig1).isEqualTo(sig2).isEqualTo("3:250:5|7:125:2");
+        assertThat(sig1).isEqualTo(sig2).isEqualTo("3:250.00:5|7:125.00:2");
+    }
+
+    @Test
+    void shouldFormatIntegerDosageWithTwoDecimals() {
+        List<MedicamentCompositionForm> compositions = List.of(
+                new MedicamentCompositionForm(42L, new BigDecimal("500"), 9L, 1));
+
+        String signature = equivalenceSignatureService.generateSignature(compositions);
+
+        assertThat(signature).isEqualTo("42:500.00:9");
     }
 
     @Test
