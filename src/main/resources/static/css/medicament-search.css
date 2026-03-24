@@ -55,11 +55,11 @@ body {
 }
 
 .hero-logo-country {
-    height: 86px;
+    height: 92px;
 }
 
 .hero-logo-ministry {
-    height: 78px;
+    height: 92px;
 }
 
 .hero h1 {
@@ -419,11 +419,11 @@ tbody tr:nth-child(even) {
     }
 
     .hero-logo-country {
-        height: 66px;
+        height: 72px;
     }
 
     .hero-logo-ministry {
-        height: 60px;
+        height: 72px;
     }
 
     .hero h1 {
