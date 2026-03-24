@@ -131,16 +131,17 @@ th {
     border-top: 0;
 }
 
-.actions-col,
-.actions-cell {
-    text-align: right;
+.actions-col {
+    width: 2.8rem;
+    min-width: 2.8rem;
+    text-align: center;
 }
 
 .actions-cell {
     display: flex;
-    justify-content: end;
+    justify-content: center;
+    align-items: center;
     gap: 0.45rem;
-    flex-wrap: wrap;
 }
 
 .btn {
@@ -237,5 +238,40 @@ th {
     text-align: center;
     color: var(--muted);
     font-style: italic;
+}
+
+/* ------ Bouton icône (actions tableau) ------ */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn-icon-danger {
+    color: var(--danger, #c0392b);
+    border-color: transparent;
+}
+
+.btn-icon-edit {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.btn-icon-edit:hover {
+    background: #eaf2fb;
+    border-color: var(--primary);
+}
+
+.btn-icon-danger:hover {
+    background: #fdecea;
+    border-color: var(--danger, #c0392b);
 }
 

@@ -65,7 +65,11 @@ public class ReferenceDataAdminViewController {
             @RequestParam(name = "size", defaultValue = "10") int size,
             Model model) {
         ReferenceDataType resolvedType = ReferenceDataType.fromSlug(type);
-        Pageable pageable = PageRequest.of(Math.max(page, 0), clampPageSize(size), Sort.by(Sort.Direction.ASC, "id"));
+        String sortField = switch (resolvedType) {
+            case LABORATOIRES, MOLECULES -> "nom";
+            case FORMES, UNITES_DOSAGE -> "libelle";
+        };
+        Pageable pageable = PageRequest.of(Math.max(page, 0), clampPageSize(size), Sort.by(Sort.Direction.ASC, sortField));
 
         Page<?> resultPage = switch (resolvedType) {
             case FORMES -> formeService.search(query, pageable);
