@@ -8,11 +8,26 @@
 </head>
 <body>
 <main class="admin-page admin-page-narrow">
-    <a class="back-link" th:href="@{/admin/referentiels/{type}(type=${type.slug})}">← Retour à la liste</a>
+    <header class="admin-header">
+        <div>
+            <p class="admin-eyebrow">Administration</p>
+            <h1 th:text="${isEdit} ? 'Modifier ' + ${type.singularLabel} : 'Créer ' + ${type.singularLabel}">Formulaire</h1>
+            <p class="admin-subtitle">Gestion du référentiel des médicaments</p>
+        </div>
+        <a class="back-link" th:href="@{/admin/referentiels/{type}(type=${type.slug})}">← Retour à la liste</a>
+    </header>
+
+    <nav class="admin-nav">
+        <a th:href="@{/admin/medicaments}">Médicaments</a>
+        <a th:classappend="${type.slug == 'laboratoires'} ? ' active'" th:href="@{/admin/referentiels/laboratoires}">Laboratoires</a>
+        <a th:classappend="${type.slug == 'molecules'} ? ' active'" th:href="@{/admin/referentiels/molecules}">Molécules</a>
+        <a th:classappend="${type.slug == 'formes'} ? ' active'" th:href="@{/admin/referentiels/formes}">Formes</a>
+        <a th:classappend="${type.slug == 'unites-dosage'} ? ' active'" th:href="@{/admin/referentiels/unites-dosage}">Unités de dosage</a>
+    </nav>
 
 
     <section class="card">
-        <h1 th:text="${isEdit} ? 'Modifier ' + ${type.singularLabel} : 'Créer ' + ${type.singularLabel}">Formulaire</h1>
+        <h2 th:text="${isEdit} ? 'Modifier ' + ${type.singularLabel} : 'Créer ' + ${type.singularLabel}">Formulaire</h2>
 
         <div class="alert error" th:if="${#fields.hasGlobalErrors()}" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
 

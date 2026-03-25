@@ -36,7 +36,7 @@
                    th:value="${query}"
                    placeholder="Rechercher..."
                    aria-label="Recherche">
-            <button class="btn" type="submit">Rechercher</button>
+            <button class="btn btn-primary" type="submit">Rechercher</button>
             <a class="btn btn-light" th:href="@{/admin/referentiels/{type}(type=${type.slug})}">Réinitialiser</a>
         </form>
 
