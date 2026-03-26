@@ -50,10 +50,9 @@
                 <thead>
                 <tr>
                     <th>Libellé complet</th>
-                    <th>Présentation</th>
-                    <th>Forme</th>
+                    <th>Présentation/forme</th>
                     <th class="price-header" title="Prix pharmacie">P. Pharma</th>
-                    <th class="price-header" title="Prix grossiste">P. Grossiste</th>
+                    <th class="price-header" title="Prix grossiste">P. Pharma</th>
                     <th class="price-header" title="Prix CAMEC">P. CAMEC</th>
                     <th>Laboratoire</th>
                     <th class="actions-col"></th>
@@ -61,20 +60,19 @@
                 </thead>
                 <tbody>
                 <tr th:if="${#lists.isEmpty(medicaments)}">
-                    <td colspan="8" class="empty-cell">Aucun médicament trouvé pour cette recherche.</td>
+                    <td colspan="7" class="empty-cell">Aucun médicament trouvé pour cette recherche.</td>
                 </tr>
                 <tr th:each="item : ${medicaments}">
                     <td class="cell-libelle-complet" th:text="${item.libelleComplet}"></td>
-                    <td th:text="${item.presentation ?: '—'}"></td>
-                    <td th:text="${item.forme ?: '—'}"></td>
+                    <td th:text="${(item.presentation != null and !#strings.isEmpty(item.presentation)) and (item.forme != null and !#strings.isEmpty(item.forme)) ? item.presentation + ' / ' + item.forme : (item.presentation != null and !#strings.isEmpty(item.presentation) ? item.presentation : (item.forme != null and !#strings.isEmpty(item.forme) ? item.forme : '—'))}"></td>
                     <td class="price-cell"
-                        th:text="${item.prixPharmacie != null ? #numbers.formatDecimal(item.prixPharmacie,1,2) + ' MRU' : '—'}">
+                        th:text="${item.prixPharmacie != null ? #numbers.formatDecimal(item.prixPharmacie,1,2) : '—'}">
                     </td>
                     <td class="price-cell"
-                        th:text="${item.prixGrossiste != null ? #numbers.formatDecimal(item.prixGrossiste,1,2) + ' MRU' : '—'}">
+                        th:text="${item.prixGrossiste != null ? #numbers.formatDecimal(item.prixGrossiste,1,2) : '—'}">
                     </td>
                     <td class="price-cell"
-                        th:text="${item.prixCamec != null ? #numbers.formatDecimal(item.prixCamec,1,2) + ' MRU' : '—'}">
+                        th:text="${item.prixCamec != null ? #numbers.formatDecimal(item.prixCamec,1,2) : '—'}">
                     </td>
                     <td th:text="${item.laboratoire ?: '—'}"></td>
                     <td class="actions-cell">

@@ -5,9 +5,9 @@
     <table>
         <thead>
         <tr>
-            <th>Libellé complet</th>
+            <th>Nom complet</th>
             <th>Prix pharmacie</th>
-            <th>Consultation</th>
+            <th>Fiche médicament</th>
         </tr>
         </thead>
         <tbody>
@@ -15,12 +15,12 @@
             <td colspan="3">Aucun résultat trouvé.</td>
         </tr>
         <tr th:each="medicament : ${results}">
-            <td data-label="Libellé complet">
+            <td data-label="Nom complet">
                 <div class="result-title" th:text="${medicament.libelleComplet}">Doliprane 1000 mg comprimé</div>
                 <div class="result-subtitle" th:text="${medicament.libelle}">Doliprane</div>
             </td>
             <td class="price-cell" data-label="Prix pharmacie" th:text="${medicament.prixPharmacie != null ? medicament.prixPharmacie + ' MRU' : 'Non renseigné'}"></td>
-            <td data-label="Consultation">
+            <td data-label="Fiche médicament">
                 <a class="detail-link" th:href="@{/medicaments/{id}(id=${medicament.id})}">Consulter la fiche</a>
             </td>
         </tr>
